@@ -31,16 +31,20 @@ $date = new Dateandtime();
 
 $spreadsheet->getActiveSheet()->getStyle('A1')->applyFromArray($styleArray);
 
-for ($i=0; $i < count($tasksArray) ; $i++) { 
+if (!$tasksArray == null) {
 
-    $sheet->setCellValue('A' . ($i+2), $tasksArray[$i]['task_name']);
+    for ($i=0; $i < count($tasksArray) ; $i++) { 
+
+        $sheet->setCellValue('A' . ($i+2), $tasksArray[$i]['task_name']);
+    }
+
+    for ($i=0; $i < count($tasksArray) ; $i++) { 
+
+        $convertedTime = $date->convertTimeFromUnix($tasksArray[$i]['work_time']);
+        $sheet->setCellValue('B' . ($i+2), $convertedTime);
+    }
 }
 
-for ($i=0; $i < count($tasksArray) ; $i++) { 
-
-    $convertedTime = $date->convertTimeFromUnix($tasksArray[$i]['work_time']);
-    $sheet->setCellValue('B' . ($i+2), $convertedTime);
-}
 
 $spreadsheet->getActiveSheet()->getStyle('B1')->applyFromArray($styleArray);
 
