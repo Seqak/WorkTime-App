@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>WorkTime App</title>
+    
+    <link rel="icon" type="image/png" sizes="16x16" href="https://cdn3.iconfinder.com/data/icons/block/32/stopwatch-512.png">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js"></script>
+    
+    <link href="../controllers/css/plugins/toastr/toastr.min.css" rel="stylesheet">
+
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+</head>
+
+<body >
+
+    <div id="wrapper">
+
+        <nav class="navbar-default navbar-static-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav metismenu" id="side-menu">
+                    <li class="nav-header">
+                        <div class="dropdown profile-element">
+                            
+                            <span class="block m-t-xs font-bold" style="color: darkgray;">WorkTime App</span>
+                            <span class="text-muted text-xs block">by Kacper</span>
+                        
+                        </div>
+                        <div class="logo-element" style="font-size: 22px;">  
+                            <i class="fa fa-clock-o" ></i>
+                        </div>
+                    </li>
+                    <li class="active">
+                        <a href="#"><i class="fa fa-home" style="font-size: 14px;"></i> <span class="nav-label">Projekty</span></a>
+                    </li>
+                    <!-- <li>
+                        <a href="minor.html"><i class="fa fa-th-large"></i> <span class="nav-label">Minor view</span> </a>
+                    </li> -->
+                </ul>
+
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="gray-bg">
+            <div class="row border-bottom">
+                <nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
+                    <div class="navbar-header">
+                        <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+                        <form role="search" class="navbar-form-custom" method="post" action="#">
+
+                        </form>
+                    </div>
+                    <ul class="nav navbar-top-links navbar-right">
+                        <li>
+                            <a href="#" style="color: #ffffff">
+                            <i class="fa fa-sign-out" ></i> Log out
+                        </a>
+                        </li>
+                    </ul>
+
+                </nav>
+            </div>
+            <div class="wrapper wrapper-content animated fadeInRight">
+
+                <div class="row wrapper border-bottom white-bg page-heading p-xs">
+                    <div class="col-md-12 row">
+                        <div class="col-11">
+                            <h2 class="m-t-sm m-b-xss">Projekty</h2>
+                        </div>
+                        <div class="col-1">
+                            <a class="btn btn-primary btn-sm m-t-sm m-b-xss pull-right" data-toggle="modal" data-target="#addPostType" style="color: white;">Dodaj projekt</a>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="wrapper wrapper-content">
+                    <div class="row">
+                        <div class="col-md-6 col-lg-6">
+
+                            <!-- Project box -->
+                            {% if projectsAmount == 0%}
+                                <span>Brak projektów</span>
+                            {% else %}
+                            {% for item in projects %}
+                            <div class="ibox ">
+                                <div class="ibox-title">
+                                    <h2> <strong>{{ item.project_name }} </strong></h2>
+                                </div>
+                                <div class="ibox-content" style="padding-bottom: 15px;">
+
+                                    <strong>Godziny w projekcie łącznie: </strong> {{ item.hours_total }}h {{ item.minutes_total }}min<br> 
+                                    <strong>Godziny w tym miesiącu: </strong>{{ item.hours_month }}h {{ item.minutes_month }}min<br>
+                                    <strong>Godziny dzisiaj: </strong> {{ item.hours_today }}h {{ item.minutes_today }}min<br>
+
+                                </div>
+
+                                <div class="ibox-footer">
+                                    <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addPostStatus{{item.id}}" onclick='f1("{{ item.id }}")' value="{{ item.id }}">Dodaj task</button>
+                                    <a href="../controllers/includes/exportxls.php?projectid={{item.id}}" class="btn btn-white btn-sm">Generuj XLS</a>
+                                    <button type="button" class="btn btn-danger btn-sm pull-right" onClick='removeRow("{{ item.id }}")'>Usuń projekt</button>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            {% endif %}
+                            <!-- / Project box -->
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <!-- Add project modal -->
+                <div class="modal inmodal" id="addPostType" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-klient">
+                        <div class="modal-content animated fadeInDown">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                <h4 class="modal-title">Dodaj projekt</h4>
+                            </div>
+
+                            <form action="../controllers/index.php" method="POST">
+                                <div class="modal-body">
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Nazwa*</label>
+                                        <div class="col-sm-10"><input name="nameProject" type="text" class="form-control" required=""></div>
+                                    </div>
+
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-white" data-dismiss="modal">Anuluj</button>
+                                    <button type="submit" class="btn btn-primary">Zapisz</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- / Add project modal -->
+
+                <!-- Add task modal -->
+                {% for itemModal in projects %}
+                <div class="modal inmodal" id="addPostStatus{{itemModal.id}}" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-klient">
+                        <div class="modal-content animated fadeInDown">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                <h4 class="modal-title">Dodaj task</h4>
+                            </div>
+
+                            <form action="../controllers/index.php" method="POST">
+                                <div class="modal-body">
+    
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Nazwa*</label>
+                                        <div class="col-sm-9"><input name="taskName" type="text" class="form-control" required></div>
+                                    </div>
+
+                                    <input name="projectId" type="text" hidden value="{{itemModal.id}}">
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Godzina startu*</label>
+                                        <div class="col-sm-9"><input name="timeStart" id="timeinput{{itemModal.id}}" type="time" class="form-control" value="" min="00:00" max="23:59" ></div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Godzina zakończenia*</label>
+                                        <div class="col-sm-9"><input name="timeEnd" type="time" class="form-control" value="" min="00:00" max="23:59" ></div>
+                                    </div>
+                                    
+                                </div>
+
+                                <div class="modal-footer">
+                                    <div style="margin-right: 260px;">{{itemModal.project_name}}</div>
+                                    <button type="button" class="btn btn-white" data-dismiss="modal">Anuluj</button>
+                                    <button type="submit" class="btn btn-primary">Zapisz</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                <!-- / Add task modal -->
+
+            </div>
+            <div class="footer">
+                <div class="pull-right">
+                    <!-- 10GB of <strong>250GB</strong> Free. -->
+                    <a data-toggle="tooltip" data-placement="top" title="" data-original-title="Polski" href="#" class="language-link  not-active-flag "><img src="https://dev.desktomy.pl/assets/img/flags/pl.png"></a>
+                    <a data-toggle="tooltip" data-placement="top" title="" data-original-title="English" href="#" class="language-link "><img src="https://dev.desktomy.pl/assets/img/flags/en.png"></a>
+                </div>
+                <div>
+                    <strong>WorkTime App</strong> &copy; 2020
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Mainly scripts -->
+    <script src="../controllers/js/jquery-3.1.1.min.js"></script>
+    <script src="../controllers/js/popper.min.js"></script>
+    <script src="../controllers/js/bootstrap.min.js"></script>
+    <script src="../controllers/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="../controllers/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="../controllers/js/inspinia.js"></script>
+    <script src="../controllers/js/plugins/pace/pace.min.js"></script>
+    <!-- <script src="js/plugins/sweetalert/sweetalert.min.js"></script> -->
+    <script src="../controllers/js/plugins/toastr/toastr.min.js"></script>
+    
+    
+    {% for itemScript in projects %}
+    <script>
+
+        function f1(id){
+
+        var d = new Date();
+        var hours = d.getHours();
+        var minutes = d.getMinutes();
+        
+        if (hours   < 10) {hours   = "0"+hours;}
+        if (minutes < 10) {minutes = "0"+minutes;}
+
+        var time = hours + ":" + minutes;
+        document.getElementById("timeinput" + id).value=time;
+
+        }
+
+    </script>
+    {% endfor %}
+
+    <script>
+
+        function removeRow(id){
+            console.log(id);
+                swal({
+                    title: "Usunąć tego klienta?",
+                    text: "Usunięty klient zostanie całkowicie usunięty z bazy danych.",
+                    icon: "warning",
+                    buttons: ["Anuluj", "Usuń"],
+                    dangerMode: true,
+                    })
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            $.post("../controllers/includes/deleteproject.php", {
+                                id: id
+                            }, function(){
+                                location.reload();
+                            });
+                        } else {
+                            
+                        }
+                    });
+            };
+    </script>
+
+</body>
+
+</html>
