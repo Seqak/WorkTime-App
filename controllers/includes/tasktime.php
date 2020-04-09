@@ -30,7 +30,7 @@ else{
     $addTaskObj = new Addtask();
     $addTaskObj->addNewTask($workTime, $unixAddTime, $projectId, $taskName);
 
-    header('Location: ../index.php?time=' . $workTime);
+    header('Location: ../index.php');
 }
 
 
