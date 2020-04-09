@@ -9,3 +9,8 @@ An application that helps in counting the working time. Especially if you work i
 4. Use worktime-app/controllers/index.php to start working with app.
 
 I hope that the application will be helpful!
+
+
+
+
+![Main view](/controllers/img/image.png)
