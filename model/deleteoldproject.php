@@ -21,8 +21,6 @@ class DeleteProject extends DBconnect{
 
             $pdo->commit();
 
-           return true;
-
         } catch (\Throwable $e) {
             throw $e;
         }

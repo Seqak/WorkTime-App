@@ -7,6 +7,16 @@ require('../model/project.php');
 require('../model/getprojects.php');
 require_once("../model/gettimes.php");
 
+
+if (isset($_SESSION['toastType']) && isset($_SESSION['toastStatus'])) {
+
+    $toastType = $_SESSION['toastType']; 
+    $toastStatus = $_SESSION['toastStatus'];
+
+    unset($_SESSION['toastType']);
+    unset($_SESSION['toastStatus']);
+}
+
 if (isset($_POST['nameProject'])) {
     $nameProject = $_POST['nameProject'];
     header('Location: includes/addnewproject.php?nameProject=' . $nameProject);
@@ -23,6 +33,10 @@ if (!empty($_POST['timeStart']) && !empty($_POST['timeEnd'] ) && !empty($_POST['
     $projectId = $_POST['projectId'];
 
     header('Location: includes/tasktime.php?timestart=' . $timeStart . '&timeend=' . $timeEnd . '&projectid=' . $projectId . '&taskname=' . $taskName);
+}
+elseif (isset($_POST['taskSubmit']) && (empty($_POST['timeStart']) || empty($_POST['timeEnd'] ) || empty($_POST['taskName'] ))){
+    $toastType = "task"; 
+    $toastStatus = "danger";
 }
 
 $projects = new GetProjects();
@@ -54,6 +68,9 @@ echo $twig->render('index.html', array(
     'projectAddStatus' => $projectAddStatus ?? null,
     'projects' => $projectsObj ?? null,
     'projectsAmount' => $allProjects ?? null,
+    'toastType' => $toastType ?? null,
+    'toastStatus' => $toastStatus?? null,
+
 ));
 
 ?>

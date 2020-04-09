@@ -111,7 +111,7 @@
                                 </div>
 
                                 <div class="ibox-footer">
-                                    <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addPostStatus{{item.id}}" onclick='f1("{{ item.id }}")' value="{{ item.id }}">Dodaj task</button>
+                                    <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addPostStatus{{item.id}}" onclick='currentTime("{{ item.id }}")' value="{{ item.id }}">Dodaj task</button>
                                     <a href="../controllers/includes/exportxls.php?projectid={{item.id}}" class="btn btn-white btn-sm">Generuj XLS</a>
                                     <button type="button" class="btn btn-danger btn-sm pull-right" onClick='removeRow("{{ item.id }}")'>Usuń projekt</button>
                                 </div>
@@ -188,7 +188,7 @@
                                 <div class="modal-footer">
                                     <div style="margin-right: 260px;">{{itemModal.project_name}}</div>
                                     <button type="button" class="btn btn-white" data-dismiss="modal">Anuluj</button>
-                                    <button type="submit" class="btn btn-primary">Zapisz</button>
+                                    <button name="taskSubmit" type="submit" class="btn btn-primary">Zapisz</button>
                                 </div>
                             </form>
                         </div>
@@ -224,52 +224,24 @@
     <script src="../controllers/js/plugins/pace/pace.min.js"></script>
     <!-- <script src="js/plugins/sweetalert/sweetalert.min.js"></script> -->
     <script src="../controllers/js/plugins/toastr/toastr.min.js"></script>
+    <script src="main.js"></script>
+    
     
     
     {% for itemScript in projects %}
     <script>
-
-        function f1(id){
-
-        var d = new Date();
-        var hours = d.getHours();
-        var minutes = d.getMinutes();
-        
-        if (hours   < 10) {hours   = "0"+hours;}
-        if (minutes < 10) {minutes = "0"+minutes;}
-
-        var time = hours + ":" + minutes;
-        document.getElementById("timeinput" + id).value=time;
-
-        }
-
+        currentTime(id);
     </script>
     {% endfor %}
 
     <script>
-
-        function removeRow(id){
-            console.log(id);
-                swal({
-                    title: "Usunąć tego klienta?",
-                    text: "Usunięty klient zostanie całkowicie usunięty z bazy danych.",
-                    icon: "warning",
-                    buttons: ["Anuluj", "Usuń"],
-                    dangerMode: true,
-                    })
-                    .then((willDelete) => {
-                        if (willDelete) {
-                            $.post("../controllers/includes/deleteproject.php", {
-                                id: id
-                            }, function(){
-                                location.reload();
-                            });
-                        } else {
-                            
-                        }
-                    });
-            };
+        removeRow(id);
     </script>
+
+    <script> 
+        toastrSystem( '{{ toastType }}', '{{ toastStatus }}' );  
+    </script>
+
 
 </body>
 

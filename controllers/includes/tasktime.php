@@ -30,6 +30,9 @@ else{
     $addTaskObj = new Addtask();
     $addTaskObj->addNewTask($workTime, $unixAddTime, $projectId, $taskName);
 
+    $_SESSION['toastType'] = "task"; 
+    $_SESSION['toastStatus'] = "success";
+
     header('Location: ../index.php');
 }
 

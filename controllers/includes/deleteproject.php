@@ -8,7 +8,11 @@ if (isset($_POST['id'])) {
     $projectId = $_POST['id'];
     
     $projectDelete = new DeleteProject();
-    $stauZ = $projectDelete->deletePro($projectId);
-    
-    header('Location: ../index.php?projectDelStatus=' .  $stauZ);
+    $projectDelete->deletePro($projectId);
+
+    $_SESSION['toastType'] = "project"; 
+    $_SESSION['toastStatus'] = "deleted";
+
 }
+
+    
