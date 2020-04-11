@@ -17,26 +17,19 @@ if (isset($_SESSION['toastType']) && isset($_SESSION['toastStatus'])) {
     unset($_SESSION['toastStatus']);
 }
 
-if (isset($_POST['nameProject'])) {
+if ( isset( $_POST['projectSubmit'] )  &&  !empty( $_POST['nameProject'] ) ) {
     $nameProject = $_POST['nameProject'];
     header('Location: includes/addnewproject.php?nameProject=' . $nameProject);
 }
 
-if (isset($_GET['projectAddStatus'])) {
-    $projectAddStatus = $_GET['projectAddStatus'];
-}
+if ( isset($_POST['taskSubmit']) ) {
 
-if (!empty($_POST['timeStart']) && !empty($_POST['timeEnd'] ) && !empty($_POST['taskName'] )) {
     $timeStart = $_POST['timeStart'];
     $timeEnd = $_POST['timeEnd'];
-    $taskName = $_POST['taskName'];
+    $taskName = htmlentities($_POST['taskName'], ENT_QUOTES, "UTF-8");
     $projectId = $_POST['projectId'];
 
     header('Location: includes/tasktime.php?timestart=' . $timeStart . '&timeend=' . $timeEnd . '&projectid=' . $projectId . '&taskname=' . $taskName);
-}
-elseif (isset($_POST['taskSubmit']) && (empty($_POST['timeStart']) || empty($_POST['timeEnd'] ) || empty($_POST['taskName'] ))){
-    $toastType = "task"; 
-    $toastStatus = "danger";
 }
 
 $projects = new GetProjects();
@@ -72,5 +65,14 @@ echo $twig->render('index.html', array(
     'toastStatus' => $toastStatus?? null,
 
 ));
+
+
+/*          FIXES
+
+    - *Done*    You can add the project in the Name field filling only with spaces.
+    - *Done*    You can add the task in the Name field filling only with spaces. 
+    - *Done*    Case: Add task -> Spaces in the Name field && bad hours in time input.
+
+*/
 
 ?>

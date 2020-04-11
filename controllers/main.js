@@ -28,6 +28,9 @@ function toastrSystem( toastType, toastStatus){
             else if(toastStatus == "deleted"){
                 toastr.success("Projekt został usunięty pomyślnie");
             }
+            else if(toastStatus == "danger"){
+                toastr.error("Pole Nazwa musi być wypełnione", "UWAGA!");
+            }
         }
         else if(toastType == "task"){
 
@@ -35,7 +38,7 @@ function toastrSystem( toastType, toastStatus){
                 toastr.success("Zadanie zostało dodane pomyślnie");
             }
             else if(toastStatus == "danger"){
-                toastr.error("Pola Godziny muszą być wypełnione", "UWAGA!");
+                toastr.error("Pola Godziny muszą być wypełnione poprawnie", "UWAGA!");
             }
         }  
     }   

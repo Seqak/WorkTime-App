@@ -4,7 +4,7 @@ require_once("dateandtime.php");
 require('../../model/dbconnect.php');
 require('../../model/addtask.php');
 
-if (isset($_GET['timestart']) && isset($_GET['timeend']) && isset($_GET['projectid']) && isset($_GET['taskname'])) {
+if (!empty($_GET['timestart']) && !empty($_GET['timeend']) && !empty($_GET['projectid']) && !empty($_GET['taskname'])) {
 
     $timeStart = $_GET['timestart'];
     $timeEnd = $_GET['timeend'];   
@@ -12,6 +12,14 @@ if (isset($_GET['timestart']) && isset($_GET['timeend']) && isset($_GET['project
     $taskName = htmlentities($taskName, ENT_QUOTES, "UTF-8");
     $projectId = $_GET['projectid'];
 }
+elseif ( empty($_GET['timestart']) || empty($_GET['timeend']) || empty($_GET['taskname']) ) {
+    $_SESSION['toastType'] = "task"; 
+    $_SESSION['toastStatus'] = "danger";
+    header('Location: ../index.php');
+    exit();
+}
+
+
 $date = new Dateandtime();
 $addTime = $date->getDate();
 
@@ -19,7 +27,11 @@ $unixStartTime = $date->startTasktoUnix($timeStart);
 $unixEndTime = $date->startTasktoUnix($timeEnd);
 
 if ($unixStartTime >= $unixEndTime) {
-    header('Location: ../index.php?time=badHours' );
+
+    $_SESSION['toastType'] = "task"; 
+    $_SESSION['toastStatus'] = "danger";
+    header('Location: ../index.php' );
+    exit();
 }
 else{
 
