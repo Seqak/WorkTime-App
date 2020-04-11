@@ -12,7 +12,7 @@ function toastrSystem( toastType, toastStatus){
             "onclick": null,
             "showDuration": "400",
             "hideDuration": "1000",
-            "timeOut": "1800",
+            "timeOut": "2000",
             "extendedTimeOut": "1000",
             "showEasing": "swing",
             "hideEasing": "linear",
@@ -29,7 +29,7 @@ function toastrSystem( toastType, toastStatus){
                 toastr.success("Projekt został usunięty pomyślnie");
             }
             else if(toastStatus == "danger"){
-                toastr.error("Pole Nazwa musi być wypełnione", "UWAGA!");
+                toastr.error("Pole Nazwa musi być wypełnione lub podana nazwa już istnieje", "UWAGA!");
             }
         }
         else if(toastType == "task"){

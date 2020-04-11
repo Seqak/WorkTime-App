@@ -8,12 +8,23 @@ if (!empty($_GET['nameProject'])) {
     $nameProject = $_GET['nameProject'];
 
     $addProject = new Addproject();
-    $addProject->addNewProject($nameProject);
+    $queryStatus = $addProject->addNewProject($nameProject);
 
-    $_SESSION['toastType'] = "project"; 
-    $_SESSION['toastStatus'] = "success";
+    if ($queryStatus == true) {
+        
+        $_SESSION['toastType'] = "project"; 
+        $_SESSION['toastStatus'] = "success";
 
-    header('Location: ../index.php');
+        header('Location: ../index.php?stat=' . $stat);
+
+    }
+    else{
+        $_SESSION['toastType'] = "project"; 
+        $_SESSION['toastStatus'] = "danger";
+
+        header('Location: ../index.php?stat=' . $stat);
+    }
+
 }
 else{
     $_SESSION['toastType'] = "project"; 

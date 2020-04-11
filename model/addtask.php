@@ -8,7 +8,10 @@ class Addtask extends DBconnect{
 
         try {
 
-            $totalHoursQuery = $pdo->query("SELECT hours_total FROM projects WHERE id = '$projectId'");
+            $totalHoursQuery = $pdo->prepare("SELECT hours_total FROM projects WHERE id = :projectid");
+            $totalHoursQuery->bindValue(":projectid", $projectId, PDO::PARAM_INT);
+            $totalHoursQuery->execute();
+            
             $totalHours = $totalHoursQuery->fetch();
 
             $updateHours = $totalHours['hours_total'] + $workTime;

@@ -66,13 +66,4 @@ echo $twig->render('index.html', array(
 
 ));
 
-
-/*          FIXES
-
-    - *Done*    You can add the project in the Name field filling only with spaces.
-    - *Done*    You can add the task in the Name field filling only with spaces. 
-    - *Done*    Case: Add task -> Spaces in the Name field && bad hours in time input.
-
-*/
-
 ?>

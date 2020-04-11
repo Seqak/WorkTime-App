@@ -8,7 +8,10 @@ class Addproject extends DBconnect{
 
         try {
 
-            $projectNameCheck = $pdo->query("SELECT id FROM projects WHERE project_name = '$nameProject'");
+            $projectNameCheck = $pdo->prepare("SELECT id FROM projects WHERE project_name = :project_name");
+            $projectNameCheck->bindValue(':project_name', $nameProject, PDO::PARAM_STR);
+            $projectNameCheck->execute();
+
             $nameExist = $projectNameCheck->fetch();
 
             if ($nameExist > 0 ) {
