@@ -102,12 +102,61 @@
                                 <div class="ibox-title">
                                     <h2> <strong>{{ item.project_name }} </strong></h2>
                                 </div>
-                                <div class="ibox-content" style="padding-bottom: 15px;">
+                                <div class="ibox-content" style="padding-bottom: 1px;">
 
                                     <strong>Godziny w projekcie łącznie: </strong> {{ item.hours_total }}h {{ item.minutes_total }}min<br> 
                                     <strong>Godziny w tym miesiącu: </strong>{{ item.hours_month }}h {{ item.minutes_month }}min<br>
                                     <strong>Godziny dzisiaj: </strong> {{ item.hours_today }}h {{ item.minutes_today }}min<br>
 
+                                    <div class="ibox" style="border-color: #ffffff;">
+
+                                        <div class="ibox-content" style="padding: 0px; padding-top: 5px; border: none;">
+                                            <div class="panel-body" style="padding: 0px; border: none;">
+
+                                                    <div >
+                                                        <h5 class="panel-title">
+                                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne{{ item.id }}"> <strong>Taski dzisiaj</strong> <i class="fa fa-chevron-down m-r-xs"></i> </a>
+                                                        </h5>
+                                                    </div>
+                                                    <div id="collapseOne{{ item.id }}" class="panel-collapse collapse in">
+                                                        <div class="panel-body" >
+
+                                                            {% if item.today_tasks == null %}
+                                                            Brak tasków
+                                                            {% else %}
+                                                            <table class="table ">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th>Nazwa</th>
+                                                                    <th>Czas pracy</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody class="border-bottom">
+
+
+                                                                {% for dates in item.today_tasks  %}
+                                                                <tr>
+                                                                    <td style="max-width: 350px;">{{ dates.task_name }}</td>
+                                                                    <td>{{ dates.start_time|date('H:i') }} - {{ dates.end_time|date('H:i') }}</td>
+                                                                    <td class="text-right">
+                                                                        <div class="btn-group">
+
+                                                                            <button class="btn btn-primary btn-xs"  data-toggle="modal" data-target="#editTask{{ dates.id }}"><i class="fa fa-pencil p-none"></i></button>
+                                                                             <button class="btn btn-danger btn-xs" type="button" onClick='removeTask("{{ dates.id }}", "{{ item.id }}")'><i class="fa fa-trash p-none"></i></button>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                {% endfor %}
+                                                                {% endif %}
+
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="ibox-footer">
@@ -173,6 +222,7 @@
                                     </div>
 
                                     <input name="projectId" type="text" hidden value="{{itemModal.id}}">
+
                                     <div class="form-group row">
                                         <label class="col-sm-3 col-form-label">Godzina startu*</label>
                                         <div class="col-sm-9"><input name="timeStart" id="timeinput{{itemModal.id}}" type="time" class="form-control" value="" min="00:00" max="23:59"></div>
@@ -186,7 +236,7 @@
                                 </div>
 
                                 <div class="modal-footer">
-                                    <div style="margin-right: 260px;">{{itemModal.project_name}}</div>
+                                    <div style="margin-right: 240px;">{{itemModal.project_name}}</div>
                                     <button type="button" class="btn btn-white" data-dismiss="modal">Anuluj</button>
                                     <button name="taskSubmit" type="submit" class="btn btn-primary">Zapisz</button>
                                 </div>
@@ -197,12 +247,56 @@
                 {% endfor %}
                 <!-- / Add task modal -->
 
+                <!--               modal edit task    -->
+                {% for itemModal in projects %}
+                    {% for dates in itemModal.today_tasks  %}
+                    <div class="modal inmodal" id="editTask{{ dates.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-klient">
+                            <div class="modal-content animated fadeInDown">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                    <h4 class="modal-title">Edytuj task</h4>
+                                </div>
+
+                                <form action="../controllers/index.php" method="post">
+                                <div class="modal-body">
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Nazwa*</label>
+                                        <div class="col-sm-9"><input  name="taskName" type="text" class="form-control" value="{{ dates.task_name }}"></div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Godzina startu*</label>
+                                        <div class="col-sm-9"><input name="timeStart" type="time" class="form-control" value="{{ dates.start_time|date('H:i') }}"></div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Godzina zakończenia*</label>
+                                        <div class="col-sm-9"><input name="timeEnd" type="time" class="form-control" value="{{ dates.end_time|date('H:i') }}"></div>
+                                    </div>
+
+                                    <input name="taskId" type="hidden" value="{{dates.id}}">
+                                    <input name="projectId" type="hidden"  value="{{itemModal.id}}">
+
+                                </div>
+
+                                <div class="modal-footer">
+                                    <div style="margin-right: 240px;">{{itemModal.project_name}}</div>
+                                    <button type="button" class="btn btn-white" data-dismiss="modal">Anuluj</button>
+                                    <button name="taskEditSubmit" type="submit" class="btn btn-primary">Zapisz</button>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% endfor %}
+            <!--               modal              -->
+
             </div>
             <div class="footer">
                 <div class="pull-right">
-                    <!-- 10GB of <strong>250GB</strong> Free. -->
-                    <!-- <a data-toggle="tooltip" data-placement="top" title="" data-original-title="Polski" href="#" class="language-link  not-active-flag "><img src="https://dev.desktomy.pl/assets/img/flags/pl.png"></a>
-                    <a data-toggle="tooltip" data-placement="top" title="" data-original-title="English" href="#" class="language-link "><img src="https://dev.desktomy.pl/assets/img/flags/en.png"></a> -->
+<!--                    flags -->
                 </div>
                 <div>
                     <strong>WorkTime App</strong> &copy; 2020
@@ -233,10 +327,6 @@
         currentTime(id);
     </script>
     {% endfor %}
-
-    <script>
-        removeRow(id);
-    </script>
 
     <script> 
         toastrSystem( '{{ toastType }}', '{{ toastStatus }}' );  
