@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Czas generowania: 08 Kwi 2020, 23:04
+-- Czas generowania: 17 Maj 2020, 15:53
 -- Wersja serwera: 10.4.11-MariaDB
 -- Wersja PHP: 7.4.1
 
@@ -36,6 +36,13 @@ CREATE TABLE `projects` (
   `hours_today` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Zrzut danych tabeli `projects`
+--
+
+INSERT INTO `projects` (`id`, `project_name`, `hours_total`, `hours_month`, `hours_today`) VALUES
+(130, 'Own Project', 13500, 0, 0);
+
 -- --------------------------------------------------------
 
 --
@@ -47,8 +54,19 @@ CREATE TABLE `time` (
   `task_name` varchar(555) NOT NULL,
   `work_time` int(11) NOT NULL,
   `add_date` int(11) NOT NULL,
+  `start_time` int(11) NOT NULL,
+  `end_time` int(11) NOT NULL,
   `project_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Zrzut danych tabeli `time`
+--
+
+INSERT INTO `time` (`id`, `task_name`, `work_time`, `add_date`, `start_time`, `end_time`, `project_id`) VALUES
+(170, 'New feature tests', 5400, 1589722860, 947250000, 947255400, 130),
+(172, 'Creating new email marketing campaign', 5400, 1589722980, 947239200, 947244600, 130),
+(173, 'Call with stakeholders', 2700, 1589722980, 947232000, 947234700, 130);
 
 --
 -- Indeksy dla zrzutów tabel
@@ -75,13 +93,13 @@ ALTER TABLE `time`
 -- AUTO_INCREMENT dla tabeli `projects`
 --
 ALTER TABLE `projects`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=131;
 
 --
 -- AUTO_INCREMENT dla tabeli `time`
 --
 ALTER TABLE `time`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=174;
 
 --
 -- Ograniczenia dla zrzutów tabel
