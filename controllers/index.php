@@ -8,7 +8,8 @@ require('../model/getprojects.php');
 require_once("../model/gettimes.php");
 
 
-if (isset($_SESSION['toastType']) && isset($_SESSION['toastStatus'])) {
+if (isset($_SESSION['toastType']) && isset($_SESSION['toastStatus']))
+{
 
     $toastType = $_SESSION['toastType']; 
     $toastStatus = $_SESSION['toastStatus'];
@@ -17,13 +18,15 @@ if (isset($_SESSION['toastType']) && isset($_SESSION['toastStatus'])) {
     unset($_SESSION['toastStatus']);
 }
 
-if ( isset( $_POST['projectSubmit'] )  &&  !empty( $_POST['nameProject'] ) ) {
+if ( isset( $_POST['projectSubmit'] )  &&  !empty( $_POST['nameProject'] ) )
+{
     $nameProject = $_POST['nameProject'];
     header('Location: includes/addnewproject.php?nameProject=' . $nameProject);
 }
 
-if ( isset($_POST['taskSubmit']) ) {
-
+// New task
+if ( isset($_POST['taskSubmit']) )
+{
     $timeStart = $_POST['timeStart'];
     $timeEnd = $_POST['timeEnd'];
     $taskName = htmlentities($_POST['taskName'], ENT_QUOTES, "UTF-8");
@@ -32,12 +35,25 @@ if ( isset($_POST['taskSubmit']) ) {
     header('Location: includes/tasktime.php?timestart=' . $timeStart . '&timeend=' . $timeEnd . '&projectid=' . $projectId . '&taskname=' . $taskName);
 }
 
+//Edit task
+if ( isset($_POST['taskEditSubmit']) )
+{
+    $timeStart = $_POST['timeStart'];
+    $timeEnd = $_POST['timeEnd'];
+    $taskName = htmlentities($_POST['taskName'], ENT_QUOTES, "UTF-8");
+    $projectId = $_POST['projectId'];
+    $taskId = $_POST['taskId'];
+
+    header('Location: includes/edittasktime.php?timestart=' . $timeStart . '&timeend=' . $timeEnd . '&taskid=' . $taskId . '&projectid=' . $projectId .'&taskname=' . $taskName);
+}
+
 $projects = new GetProjects();
 $allProjects = $projects->getAllProjects();
 
-if (!$allProjects == null) {
-    for ($i=0; $i <= count($allProjects) -1 ; $i++) { 
-
+if (!$allProjects == null)
+{
+    for ($i=0; $i <= count($allProjects) -1 ; $i++)
+    {
         $projectsObj[] = new Project();
         $timeMonth = new GetTimes();
     
@@ -50,9 +66,12 @@ if (!$allProjects == null) {
     
         $dayAmount = $timeMonth->getTodayHours($allProjects[$i]['id']);
         $projectsObj[$i]->setHoursToday($dayAmount);
-      
-    } 
+
+        $todayTasks = $timeMonth->getTodayTasks($allProjects[$i]['id']);
+        $projectsObj[$i]->setTodayTasks($todayTasks);
+    }
 }
+
 
 $loader = new Twig_Loader_Filesystem('../views');
 $twig = new Twig_Environment($loader);

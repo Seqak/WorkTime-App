@@ -44,4 +44,30 @@ class GetTimes extends DBconnect{
         return $hoursAmount;
     }
 
+    public function getTodayTasks($projectId)
+    {
+        $pdo = $this->connect();
+
+        $day = date("d");
+        $month = date("m");
+        $year = date("Y");
+
+        $todayTasksStmt = $pdo->prepare("SELECT id, task_name, start_time, end_time FROM time WHERE project_id = :projectId AND DAY(FROM_UNIXTIME(add_date)) = :day AND MONTH(FROM_UNIXTIME(add_date)) = :month AND YEAR(FROM_UNIXTIME(add_date))= :year");
+
+        $todayTasksStmt->bindVAlue(':projectId', $projectId, PDO::PARAM_INT);
+        $todayTasksStmt->bindVAlue(':day', $day, PDO::PARAM_INT);
+        $todayTasksStmt->bindVAlue(':month', $month, PDO::PARAM_INT);
+        $todayTasksStmt->bindVAlue(':year', $year, PDO::PARAM_INT);
+        $todayTasksStmt->execute();
+
+
+        $numRows = $todayTasksStmt->rowCount();
+        if ($numRows > 0) {
+            while ($row = $todayTasksStmt->fetch(PDO::FETCH_ASSOC)) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+    }
+
 }

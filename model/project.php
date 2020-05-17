@@ -9,6 +9,7 @@ class Project{
     public $minutes_month;
     public $hours_today;
     public $minutes_today;
+    public $today_tasks = array();
 
     public function setId($id){ $this->id = $id;}
 
@@ -41,6 +42,11 @@ class Project{
         
         $this->hours_today = $hours;
         $this->minutes_today = $mins;
+    }
+
+    public function setTodayTasks($todayTasks)
+    {
+        $this->today_tasks = $todayTasks;
     }
 
 

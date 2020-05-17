@@ -20,27 +20,46 @@ function toastrSystem( toastType, toastStatus){
             "hideMethod": "fadeOut"
           }
 
-        if (toastType == "project") {
+        if (toastType == "project")
+        {
 
-            if (toastStatus == "success") {
+            if (toastStatus == "success")
+            {
                 toastr.success("Projekt został dodany pomyślnie");
             }
-            else if(toastStatus == "deleted"){
+            else if(toastStatus == "deleted")
+            {
                 toastr.success("Projekt został usunięty pomyślnie");
             }
-            else if(toastStatus == "danger"){
+            else if(toastStatus == "danger")
+            {
                 toastr.error("Pole Nazwa musi być wypełnione lub podana nazwa już istnieje", "UWAGA!");
             }
         }
-        else if(toastType == "task"){
+        else if(toastType == "task")
+        {
 
-            if (toastStatus == "success") {
+            if (toastStatus == "success")
+            {
                 toastr.success("Zadanie zostało dodane pomyślnie");
             }
-            else if(toastStatus == "danger"){
+            else if(toastStatus == "danger")
+            {
+                toastr.error("Pola muszą być wypełnione poprawnie", "UWAGA!");
+            }
+        }
+        else if(toastType == "taskEdit")
+        {
+
+            if (toastStatus == "success")
+            {
+                toastr.success("Zadanie zostało zaktualizowane pomyślnie");
+            }
+            else if(toastStatus == "danger")
+            {
                 toastr.error("Pola Godziny muszą być wypełnione poprawnie", "UWAGA!");
             }
-        }  
+        }
     }   
 }
 
@@ -80,4 +99,27 @@ function removeRow(id){
                     
                 }
             });
-};
+}
+
+function removeTask(taskId, projectId){
+    console.log(taskId); // Added just for test.
+    swal({
+        title: "Usunąć ten task?",
+        text: "Task zostanie usunięty z projektu.",
+        icon: "warning",
+        buttons: ["Anuluj", "Usuń"],
+        dangerMode: true,
+    })
+        .then((willDelete) => {
+            if (willDelete) {
+                $.post("../controllers/includes/deletetask.php", {
+                    taskId: taskId,
+                    projectId : projectId
+                }, function(){
+                    location.reload();
+                });
+            } else {
+
+            }
+        });
+}

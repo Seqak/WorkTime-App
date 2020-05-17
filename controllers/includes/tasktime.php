@@ -40,7 +40,7 @@ else{
     $workTime = $date->timeCalculate($unixStartTime, $unixEndTime);
 
     $addTaskObj = new Addtask();
-    $addTaskObj->addNewTask($workTime, $unixAddTime, $projectId, $taskName);
+    $addTaskObj->addNewTask($workTime, $unixAddTime, $projectId, $taskName, $unixStartTime, $unixEndTime);
 
     $_SESSION['toastType'] = "task"; 
     $_SESSION['toastStatus'] = "success";
