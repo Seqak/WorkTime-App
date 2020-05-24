@@ -81,6 +81,8 @@
                     <div class="col-md-12 row">
                         <div class="col-11">
                             <h2 class="m-t-sm m-b-xss">Projekty</h2>
+                            <br>
+                            <strong>Czas pracy dzisiaj:</strong> {{allHoursPerDay|date_modify("-1 hour")|date('H:i')}}
                         </div>
                         <div class="col-1">
                             <a class="btn btn-primary btn-sm m-t-sm m-b-xss pull-right" data-toggle="modal" data-target="#addPostType" style="color: white;">Dodaj projekt</a>
@@ -142,13 +144,15 @@
                                                                     <td class="text-right">
                                                                         <div class="btn-group">
 
-                                                                            <button class="btn btn-primary btn-xs"  data-toggle="modal" data-target="#editTask{{ dates.id }}"><i class="fa fa-pencil p-none"></i></button>
+                                                                            <button class="btn btn-primary btn-xs" data-tooltip="tooltip" data-toggle="modal" data-target="#editTask{{ dates.id }}"><i class="fa fa-pencil p-none"></i></button>
                                                                              <button class="btn btn-danger btn-xs" type="button" onClick='removeTask("{{ dates.id }}", "{{ item.id }}")'><i class="fa fa-trash p-none"></i></button>
                                                                         </div>
                                                                     </td>
                                                                 </tr>
                                                                 {% endfor %}
                                                                 {% endif %}
+
+
 
                                                                 </tbody>
                                                             </table>
@@ -160,6 +164,7 @@
                                 </div>
 
                                 <div class="ibox-footer">
+
                                     <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addPostStatus{{item.id}}" onclick='currentTime("{{ item.id }}")' value="{{ item.id }}">Dodaj task</button>
                                     <a href="../controllers/includes/exportxls.php?projectid={{item.id}}" class="btn btn-white btn-sm">Generuj XLS</a>
                                     <button type="button" class="btn btn-danger btn-sm pull-right" onClick='removeRow("{{ item.id }}")'>Usuń projekt</button>
@@ -168,6 +173,16 @@
                             {% endfor %}
                             {% endif %}
                             <!-- / Project box -->
+                        </div>
+
+                        <div class="col-md-3 col-lg-3">
+                            <div class="ibox">
+                                <div class="ibox-title"><h3>TO DO</h3></div>
+                                <div class="ibox-content">
+
+
+                                </div>
+                            </div>
                         </div>
 
 
@@ -218,7 +233,9 @@
     
                                     <div class="form-group row">
                                         <label class="col-sm-3 col-form-label">Nazwa*</label>
-                                        <div class="col-sm-9"><input name="taskName" type="text" class="form-control" required></div>
+                                        <div class="col-sm-9">
+                                            <textarea name="taskName" type="text" class="form-control" required ></textarea>
+                                        </div>
                                     </div>
 
                                     <input name="projectId" type="text" hidden value="{{itemModal.id}}">
@@ -263,7 +280,9 @@
 
                                     <div class="form-group row">
                                         <label class="col-sm-3 col-form-label">Nazwa*</label>
-                                        <div class="col-sm-9"><input  name="taskName" type="text" class="form-control" value="{{ dates.task_name }}"></div>
+                                        <div class="col-sm-9">
+                                            <textarea  name="taskName" type="text" class="form-control">{{ dates.task_name }}</textarea>
+                                        </div>
                                     </div>
 
                                     <div class="form-group row">
@@ -322,11 +341,11 @@
     
     
     
-    {% for itemScript in projects %}
-    <script>
-        currentTime(id);
-    </script>
-    {% endfor %}
+<!--    {% for itemScript in projects %}-->
+<!--    <script>-->
+<!--        currentTime(id);-->
+<!--    </script>-->
+<!--    {% endfor %}-->
 
     <script> 
         toastrSystem( '{{ toastType }}', '{{ toastStatus }}' );  

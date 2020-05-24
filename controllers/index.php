@@ -7,6 +7,13 @@ require('../model/project.php');
 require('../model/getprojects.php');
 require_once("../model/gettimes.php");
 
+/*
+ * TO DO
+ *
+ * 1.  DONE -> In the task add/edit modal change Name input to textarea.
+ * 2.  BLOCKER - Add tooltips to the two new buttons "Edit" and "Delete" - Edit task.
+ */
+
 
 if (isset($_SESSION['toastType']) && isset($_SESSION['toastStatus']))
 {
@@ -52,6 +59,8 @@ $allProjects = $projects->getAllProjects();
 
 if (!$allProjects == null)
 {
+    $timeFromAllProjectsPerDay = null;
+
     for ($i=0; $i <= count($allProjects) -1 ; $i++)
     {
         $projectsObj[] = new Project();
@@ -69,8 +78,11 @@ if (!$allProjects == null)
 
         $todayTasks = $timeMonth->getTodayTasks($allProjects[$i]['id']);
         $projectsObj[$i]->setTodayTasks($todayTasks);
+
+        $timeFromAllProjectsPerDay += $dayAmount;
     }
 }
+
 
 
 $loader = new Twig_Loader_Filesystem('../views');
@@ -82,7 +94,7 @@ echo $twig->render('index.html', array(
     'projectsAmount' => $allProjects ?? null,
     'toastType' => $toastType ?? null,
     'toastStatus' => $toastStatus?? null,
-
+    'allHoursPerDay' => $timeFromAllProjectsPerDay ?? null,
 ));
 
 ?>
