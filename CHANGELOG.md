@@ -12,3 +12,4 @@ In this update has been added preview of the tasks list in the current day. More
 * Possible to edit task name or work hours
 * Possible to delete chosen tasks
 
+![Main view](/controllers/img/image2.png)
