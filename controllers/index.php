@@ -12,6 +12,7 @@ require_once("../model/gettimes.php");
  *
  * 1.  DONE -> In the task add/edit modal change Name input to textarea.
  * 2.  BLOCKER - Add tooltips to the two new buttons "Edit" and "Delete" - Edit task.
+ * 3. DONE -> Add summary of time per every single task for current day.
  */
 
 

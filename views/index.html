@@ -130,7 +130,8 @@
                                                                 <thead>
                                                                 <tr>
                                                                     <th>Nazwa</th>
-                                                                    <th>Czas pracy</th>
+                                                                    <th>Godziny pracy</th>
+                                                                    <th> Czas pracy</th>
                                                                     <th></th>
                                                                 </tr>
                                                                 </thead>
@@ -141,6 +142,7 @@
                                                                 <tr>
                                                                     <td style="max-width: 350px;">{{ dates.task_name }}</td>
                                                                     <td>{{ dates.start_time|date('H:i') }} - {{ dates.end_time|date('H:i') }}</td>
+                                                                    <td>{% set czas = dates.end_time -  dates.start_time %} {{ czas|date_modify("-1 hour")|date('H:i') }}</td>
                                                                     <td class="text-right">
                                                                         <div class="btn-group">
 
@@ -175,15 +177,15 @@
                             <!-- / Project box -->
                         </div>
 
-                        <div class="col-md-3 col-lg-3">
-                            <div class="ibox">
-                                <div class="ibox-title"><h3>TO DO</h3></div>
-                                <div class="ibox-content">
+<!--                        <div class="col-md-3 col-lg-3">-->
+<!--                            <div class="ibox">-->
+<!--                                <div class="ibox-title"><h3>TO DO</h3></div>-->
+<!--                                <div class="ibox-content">-->
 
 
-                                </div>
-                            </div>
-                        </div>
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
 
 
                     </div>
